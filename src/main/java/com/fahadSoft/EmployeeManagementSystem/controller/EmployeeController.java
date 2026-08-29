@@ -1,67 +1,28 @@
 package com.fahadSoft.EmployeeManagementSystem.controller;
 
-import com.fahadSoft.EmployeeManagementSystem.entity.Employee;
-import com.fahadSoft.EmployeeManagementSystem.model.EmployeeAddRequest;
-import com.fahadSoft.EmployeeManagementSystem.model.EmployeeAddResponse;
-import com.fahadSoft.EmployeeManagementSystem.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import com.fahadSoft.EmployeeManagementSystem.model.RequestDTOs.EmployeeAddRequestDTO;
+import com.fahadSoft.EmployeeManagementSystem.model.ResponseDTOs.EmployeeAddResponseDTO;
+import com.fahadSoft.EmployeeManagementSystem.service.EmployeeService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/api/v1/employees")
+@RequiredArgsConstructor
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService service;
+    private final EmployeeService employeeService;
 
-    @GetMapping("/check")
-    public String check (){
-        return "Server is running...";
+    @PostMapping
+    public ResponseEntity<EmployeeAddResponseDTO> createEmployee(@Valid @RequestBody EmployeeAddRequestDTO requestDTO) {
+        EmployeeAddResponseDTO response = employeeService.saveEmployee(requestDTO);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
-    @PostMapping("/add")
-    public EmployeeAddResponse addEmployee(@RequestBody EmployeeAddRequest data)
-    {
-        return service.addEmployee(data);
-    }
-
-    @GetMapping("/allFullDetail")
-    public List<Employee> getAllEmployeeFullDetail(){
-        return service.getAllEmployeeFullDetail();
-    }
-
-    @GetMapping("/allBasic")
-    public List<EmployeeAddResponse> getAllEmployeeBasicInfo(){
-        return service.getAllEmployeeBasicInfo();
-    }
-
-    @GetMapping("/id/{id}")
-    public Employee getEmployeeById(@PathVariable Long id){
-        return service.getEmployeeById(id);
-    }
-
-    @GetMapping("/dept/{dept}")
-    public List<Employee> getEmployeeByDepartment(@PathVariable("dept") String department){   //if mapping variable and function variable not same then declare it inside the @Pathvariable notation
-        return service.getEmployeeByDepartment(department);
-    }
-
-    @PutMapping("/update/{id}")
-    public Employee updateEmployee(@RequestBody EmployeeAddRequest request, @PathVariable Long id){
-        return service.updateEmployee(request,id);
-    }
-
-    @DeleteMapping("delete/{id}")
-    public Map<String,String> deleteEmployee(@PathVariable Long id){
-        return service.deleteEmployee(id);
-    }
-
-    @DeleteMapping("delete/all")
-    public Map<String,String> deleteAllEmployee(){
-        return service.deleteAllEmployee();
-    }
-
-
 }
