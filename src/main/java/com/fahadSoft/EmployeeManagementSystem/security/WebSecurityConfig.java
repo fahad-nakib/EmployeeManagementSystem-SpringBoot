@@ -9,12 +9,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity){
@@ -28,13 +30,15 @@ public class WebSecurityConfig {
                         ).permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/employees/check").permitAll()
-                        .requestMatchers("/api/v1/employees/id/**").hasAnyRole("DEV","ADMIN")
-                        .requestMatchers("/api/v1/employees/**").hasRole("ADMIN")
+//                        .requestMatchers("/api/v1/employees/id/**").hasAnyRole("DEV","ADMIN")
+//                        .requestMatchers("/api/v1/employees/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
 //                .formLogin(Customizer.withDefaults());
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

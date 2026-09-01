@@ -27,7 +27,7 @@ public class AdminInitializer implements CommandLineRunner {
             admin.setFirstName("Super");
             admin.setLastName("Admin");
             admin.setEmail(adminEmail);
-            admin.setPassword(passwordEncoder.encode("123"));
+            admin.setPassword(passwordEncoder.encode("@fahad221"));
             admin.setDesignation("ADMIN");
             admin.setStatus(StatusEnum.ACTIVE);
             admin.setCreatedAt(LocalDate.now());

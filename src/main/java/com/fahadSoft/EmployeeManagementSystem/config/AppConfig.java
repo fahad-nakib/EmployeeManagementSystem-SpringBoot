@@ -22,6 +22,7 @@ public class AppConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
 //    @Bean
 //    UserDetailsService userDetailsService(){
 //        UserDetails user1 = User.withUsername("admin")
