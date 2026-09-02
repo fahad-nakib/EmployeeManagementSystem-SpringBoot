@@ -32,13 +32,7 @@ public class EmployeeAddRequestDTO {
     )
     private String email;
 
-//    @NotBlank(message = "Password cannot be blank")
-//    @Size(min = 6, message = "Password must be at least 6 characters long")
-//    @Pattern(
-//            regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
-//            message = "Password must contain at least 1 letter, 1 number, and 1 special character"
-//    )
-//    private String password;
+
 
     @NotBlank(message = "Phone number is required")
     @Pattern(
@@ -62,3 +56,10 @@ public class EmployeeAddRequestDTO {
     @NotNull(message = "Salary is required")
     private Double salary;
 }
+//    @NotBlank(message = "Password cannot be blank")
+//    @Size(min = 6, message = "Password must be at least 6 characters long")
+//    @Pattern(
+//            regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
+//            message = "Password must contain at least 1 letter, 1 number, and 1 special character"
+//    )
+//    private String password;

@@ -2,6 +2,7 @@ package com.fahadSoft.EmployeeManagementSystem.service.impl;
 
 
 import com.fahadSoft.EmployeeManagementSystem.entity.Employee;
+import com.fahadSoft.EmployeeManagementSystem.exception.EmailAlreadyExistsException;
 import com.fahadSoft.EmployeeManagementSystem.model.RequestDTOs.EmailRequestDto;
 import com.fahadSoft.EmployeeManagementSystem.model.RequestDTOs.EmployeeAddRequestDTO;
 import com.fahadSoft.EmployeeManagementSystem.model.ResponseDTOs.EmployeeAddResponseDTO;
@@ -11,6 +12,7 @@ import com.fahadSoft.EmployeeManagementSystem.service.EmployeeService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -29,7 +31,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeAddResponseDTO saveEmployee(EmployeeAddRequestDTO dto) {
 
         if (employeeRepository.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("Email address is already in use!");
+            log.warn("Employee creation failed: Email address '{}' is already in use", dto.getEmail());
+            throw new EmailAlreadyExistsException("Email address is already in use!");
         }
 
         String rawPassword = generateRandomPassword();
@@ -48,6 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCreatedAt(LocalDate.now());
 
         Employee savedEmployee = employeeRepository.save(employee);
+        log.info("Employee successfully saved in database with Generated ID: {}", savedEmployee.getId());
 
         EmployeeAddResponseDTO responseDTO = convertToResponseDTO(savedEmployee);
 
@@ -77,8 +81,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             emailService.sendSimpleEmail(emailRequest);
             log.info("Welcome email sent successfully to: {}", responseDTO.getEmail());
 
-        } catch (Exception e) {
-            log.error("Failed to send welcome email to {}: {}", responseDTO.getEmail(), e.getMessage());
+        } catch (MailException e) {
+            log.error("Failed to send welcome email to {}: {}", responseDTO.getEmail(), e.getMessage(),e);
         }
 
         return responseDTO;
