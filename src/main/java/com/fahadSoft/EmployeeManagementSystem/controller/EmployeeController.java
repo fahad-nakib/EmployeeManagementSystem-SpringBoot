@@ -2,16 +2,16 @@ package com.fahadSoft.EmployeeManagementSystem.controller;
 
 import com.fahadSoft.EmployeeManagementSystem.model.RequestDTOs.EmployeeAddRequestDTO;
 import com.fahadSoft.EmployeeManagementSystem.model.ResponseDTOs.EmployeeAddResponseDTO;
+import com.fahadSoft.EmployeeManagementSystem.model.ResponseDTOs.EmployeeResponseDTO;
 import com.fahadSoft.EmployeeManagementSystem.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,5 +29,12 @@ public class EmployeeController {
 
         log.info("Successfully processed employee creation request for email: {}", response.getEmail());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+
+    @GetMapping
+    public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees() {
+        List<EmployeeResponseDTO> employees = employeeService.getAllEmployees();
+        return ResponseEntity.ok(employees);
     }
 }

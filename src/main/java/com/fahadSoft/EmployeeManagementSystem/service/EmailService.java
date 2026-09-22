@@ -1,7 +1,7 @@
 package com.fahadSoft.EmployeeManagementSystem.service;
 
-import com.fahadSoft.EmployeeManagementSystem.model.RequestDTOs.EmailRequestDto;
+import com.fahadSoft.EmployeeManagementSystem.model.RequestDTOs.EmailMessageDto;
 
 public interface EmailService {
-    void sendSimpleEmail(EmailRequestDto emailRequestDto);
+    void sendSimpleEmail(EmailMessageDto emailMessageDto);
 }

@@ -4,7 +4,7 @@ package com.fahadSoft.EmployeeManagementSystem.service;
 import com.fahadSoft.EmployeeManagementSystem.entity.Employee;
 import com.fahadSoft.EmployeeManagementSystem.entity.enums.StatusEnum;
 import com.fahadSoft.EmployeeManagementSystem.exception.EmailAlreadyExistsException;
-import com.fahadSoft.EmployeeManagementSystem.model.RequestDTOs.EmailRequestDto;
+import com.fahadSoft.EmployeeManagementSystem.model.RequestDTOs.EmailMessageDto;
 import com.fahadSoft.EmployeeManagementSystem.model.RequestDTOs.EmployeeAddRequestDTO;
 import com.fahadSoft.EmployeeManagementSystem.model.ResponseDTOs.EmployeeAddResponseDTO;
 import com.fahadSoft.EmployeeManagementSystem.repository.EmployeeRepository;
@@ -51,7 +51,7 @@ class EmployeeServiceImplTest {
     private ArgumentCaptor<Employee> employeeArgumentCaptor;
 
     @Captor
-    private ArgumentCaptor<EmailRequestDto> emailRequestCaptor;
+    private ArgumentCaptor<EmailMessageDto> emailRequestCaptor;
 
     private EmployeeAddRequestDTO requestDTO;
     private Employee savedEmployee;
@@ -95,7 +95,7 @@ class EmployeeServiceImplTest {
             when(employeeRepository.existsByEmail(requestDTO.getEmail())).thenReturn(false);
             when(passwordEncoder.encode(anyString())).thenReturn("encoded_random_password");
             when(employeeRepository.save(any(Employee.class))).thenReturn(savedEmployee);
-            doNothing().when(emailService).sendSimpleEmail(any(EmailRequestDto.class));
+            doNothing().when(emailService).sendSimpleEmail(any(EmailMessageDto.class));
 
             // When
             EmployeeAddResponseDTO response = employeeService.saveEmployee(requestDTO);
@@ -118,7 +118,7 @@ class EmployeeServiceImplTest {
             assertThat(capturedEmployee.getPassword()).isEqualTo("encoded_random_password");
 
             // Validate captured email request
-            EmailRequestDto capturedEmail = emailRequestCaptor.getValue();
+            EmailMessageDto capturedEmail = emailRequestCaptor.getValue();
             assertThat(capturedEmail.getToEmail()).isEqualTo("fahad@idealsoftware.com");
             assertThat(capturedEmail.getSubject()).isEqualTo("Welcome to IdealSoftware Limited");
         }
@@ -138,7 +138,7 @@ class EmployeeServiceImplTest {
             verify(employeeRepository, times(1)).existsByEmail(requestDTO.getEmail());
             verify(passwordEncoder, never()).encode(anyString());
             verify(employeeRepository, never()).save(any(Employee.class));
-            verify(emailService, never()).sendSimpleEmail(any(EmailRequestDto.class));
+            verify(emailService, never()).sendSimpleEmail(any(EmailMessageDto.class));
         }
 
         @Test
@@ -149,7 +149,7 @@ class EmployeeServiceImplTest {
             when(passwordEncoder.encode(anyString())).thenReturn("encoded_random_password");
             when(employeeRepository.save(any(Employee.class))).thenReturn(savedEmployee);
             doThrow(new MailSendException("SMTP connection failed"))
-                    .when(emailService).sendSimpleEmail(any(EmailRequestDto.class));
+                    .when(emailService).sendSimpleEmail(any(EmailMessageDto.class));
 
             // When
             EmployeeAddResponseDTO response = employeeService.saveEmployee(requestDTO);
@@ -160,7 +160,7 @@ class EmployeeServiceImplTest {
 
             // Verify save was still completed
             verify(employeeRepository, times(1)).save(any(Employee.class));
-            verify(emailService, times(1)).sendSimpleEmail(any(EmailRequestDto.class));
+            verify(emailService, times(1)).sendSimpleEmail(any(EmailMessageDto.class));
         }
     }
 }

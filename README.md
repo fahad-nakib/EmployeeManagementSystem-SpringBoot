@@ -83,7 +83,7 @@ Create a MySQL database named `employee-management-system`:
 CREATE DATABASE `employee-management-system`;
 ```
 3. **Update Configuration**: <br>
-   Ensure `src/main/resources/application.properties` matches your local environment details:
+   Ensure `src/main/resources/application.properties.bak` matches your local environment details:
 ```bash
 spring.datasource.url=jdbc:mysql://localhost:3306/employee-management-system
 spring.datasource.username=root
