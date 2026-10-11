@@ -33,7 +33,7 @@ public class AdminInitializer implements CommandLineRunner {
             admin.setCreatedAt(LocalDate.now());
 
             employeeRepository.save(admin);
-            System.out.println(">>> Default Admin Account Created: admin@system.com / 123");
+            System.out.println(">>> Default Admin Account Created: admin@system.com / @fahad221");
         }
     }
 }

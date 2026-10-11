@@ -77,13 +77,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                         Please change your password after your first login.
                         
                         Best Regards,
-                        IdealSoftware Limited""",
+                        FNTech Limited""",
                 responseDTO.getFullName(), responseDTO.getEmail(), rawPassword
         );
 
         EmailMessageDto emailMessage = EmailMessageDto.builder()
                 .toEmail(responseDTO.getEmail())
-                .subject("Welcome to IdealSoftware Limited")
+                .subject("Welcome to FNTech Limited")
                 .messageBody(emailBody)
                 .build();
 
